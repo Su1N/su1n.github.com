@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Mybatis原理 | Su1N&#39;s B1oG</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="#底层JDBCJava程序都是通过JDBC连接数据库的。 JDBC规范 Connection: 连接数据库 Statement: 执行SQL ResultSet: 返回的结果     connection 创建 statement 查询 resultSet     ##数据库驱动 连接数据库利用数据库驱动Driver ==&amp;gt; DriverManage ==&amp;gt; getConnection">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mybatis原理">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;try&#x2F;index.html">
+<meta property="og:site_name" content="Su1N&#39;s B1oG">
+<meta property="og:description" content="#底层JDBCJava程序都是通过JDBC连接数据库的。 JDBC规范 Connection: 连接数据库 Statement: 执行SQL ResultSet: 返回的结果     connection 创建 statement 查询 resultSet     ##数据库驱动 连接数据库利用数据库驱动Driver ==&amp;gt; DriverManage ==&amp;gt; getConnection">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-10-30T01:18:28.156Z">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Su1N&#39;s B1oG" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Su1N&#39;s B1oG</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-try" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/10/29/try/" class="article-date">
+  <time datetime="2019-10-29T07:17:49.000Z" itemprop="datePublished">2019-10-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Mybatis原理
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#底层JDBC<br>Java程序都是通过JDBC连接数据库的。</p>
+<h2 id="JDBC规范"><a href="#JDBC规范" class="headerlink" title="JDBC规范"></a>JDBC规范</h2><ul>
+<li><strong>Connection</strong>: 连接数据库</li>
+<li><strong>Statement</strong>: 执行SQL</li>
+<li><strong>ResultSet</strong>: 返回的结果   </li>
+</ul>
+<p><code>connection 创建 statement 查询 resultSet</code>    </p>
+<p>##数据库驱动</p>
+<p><em>连接数据库利用数据库驱动</em><br><code>Driver ==&gt; DriverManage ==&gt; getConnection()</code></p>
+<h1 id="核心组件"><a href="#核心组件" class="headerlink" title="核心组件"></a>核心组件</h1><ul>
+<li><strong>SqlSessionFactoryBuilder</strong> ：根据配置信息或代码生成SqlSessionFactory</li>
+<li><strong>SqlSessionFactory</strong> ：依靠工厂来生成SqlSession</li>
+<li><strong>SqlSession</strong> ：是接口：①发送SQL去执行并返回结果 ②获取Mapper</li>
+<li><strong>SQL Mapper</strong> ：由Java接口和xml文件构成，给出对应的SQL和映射规则，负责发送SQL去执行，并返回结果。</li>
+</ul>
+<h2 id="映射器"><a href="#映射器" class="headerlink" title="映射器"></a>映射器</h2><p>映射器是由Java接口和XML文件共同组成。    </p>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><ul>
+<li>定义参数类型   </li>
+<li>描述缓存  </li>
+<li>描述SQL语句</li>
+<li>定义查询结果和POJO的映射关系</li>
+</ul>
+<h3 id="主要元素"><a href="#主要元素" class="headerlink" title="主要元素"></a>主要元素</h3><ul>
+<li><strong>select</strong>查询语句，可以自定义参数，返回结果集</li>
+<li><strong>insert</strong>插入语句，可以返回一个整数，表示插入的条数</li>
+<li><strong>update</strong>更新语句，可以返回一个整数，表示更新的条数</li>
+<li><strong>delete</strong>删除语句，返回一个整数，表示删除的条数</li>
+<li><strong>sql</strong>允许顶一个一部分SQL，在各个地方引用</li>
+<li><strong>resultMap</strong>，描述从数据库结果集中加载对象，配置关联关系</li>
+<li><strong>cache</strong>给定命名空间的缓存配置</li>
+</ul>
+<p>###CRUD元素</p>
+<ul>
+<li><strong>paramterType</strong>：传入的参数类型。基本类型/map/自定义Java Bean</li>
+<li><strong>resultType</strong>：返回的结果类型。基本类型/自定义Java Bean</li>
+<li><strong>resultMap</strong>：返回的结果map</li>
+<li><strong>flushCache</strong>：用于更新缓存、默认为false</li>
+<li><strong>useCache</strong>：启动二级缓存的开关，默认会启动以及缓存</li>
+<li><strong>timeout</strong>：设置超时参数，等超时时将跑出异常，单位为秒</li>
+<li><strong>fetchSize</strong>：获取记录的总条数设定</li>
+<li><strong>keyProperty</strong>：指定哪个列是主键，如果是联合主键可以用逗号隔开</li>
+<li><strong>keyColumn</strong>：指定第几列是主键</li>
+<li><strong>useGeneratedKeys</strong>：是否使用自动增长，默认为false</li>
+</ul>
+<p>###动态SQL元素</p>
+<ul>
+<li><strong>if</strong>：判断语句</li>
+<li><strong>choose</strong>：多条件分支判断</li>
+<li><strong>trim</strong>：处理一些SQL拼装问题</li>
+<li><strong>foreach</strong>：循环语句，在in语句等列举条件常用</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/10/29/try/" data-id="ck2cldy5d0000mzk28nq48a0h" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/10/29/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Java/" style="font-size: 10px;">Java</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/10/29/try/">Mybatis原理</a>
+          </li>
+        
+          <li>
+            <a href="/2019/10/29/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Su1N<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

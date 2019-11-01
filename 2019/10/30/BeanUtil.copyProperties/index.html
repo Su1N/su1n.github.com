@@ -5,13 +5,17 @@
   
 
   
-  <title>Su1N&#39;s B1oG</title>
+  <title>BeanUtil.copyProperties | Su1N&#39;s B1oG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Su1N&#39;s B1oG">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;index.html">
+  <meta name="description" content="今天一天都在debug sso服务找问题。    bug#1：copy bean 类型不一致org.springframework.beans.FatalBeanException: Could not copy properties from source to target; nested exception is java.lang.IllegalArgumentException 解决#1">
+<meta name="keywords" content="Debug">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BeanUtil.copyProperties">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;30&#x2F;BeanUtil.copyProperties&#x2F;index.html">
 <meta property="og:site_name" content="Su1N&#39;s B1oG">
+<meta property="og:description" content="今天一天都在debug sso服务找问题。    bug#1：copy bean 类型不一致org.springframework.beans.FatalBeanException: Could not copy properties from source to target; nested exception is java.lang.IllegalArgumentException 解决#1">
 <meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-11-01T07:08:11.976Z">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="Su1N&#39;s B1oG" type="application/atom+xml">
@@ -59,9 +63,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-BeanUtil.copyProperties" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-BeanUtil.copyProperties" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/10/30/BeanUtil.copyProperties/" class="article-date">
   <time datetime="2019-10-30T02:44:07.000Z" itemprop="datePublished">2019-10-30</time>
@@ -74,8 +76,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/30/BeanUtil.copyProperties/">BeanUtil.copyProperties</a>
+    <h1 class="article-title" itemprop="name">
+      BeanUtil.copyProperties
     </h1>
   
 
@@ -101,97 +103,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-Mybatis" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/10/29/Mybatis/" class="article-date">
-  <time datetime="2019-10-29T07:17:49.000Z" itemprop="datePublished">2019-10-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/10/29/Mybatis/">Mybatis</a>
-    </h1>
+    <a href="/2019/10/29/Mybatis/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Mybatis</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="底层JDBC"><a href="#底层JDBC" class="headerlink" title="底层JDBC"></a>底层JDBC</h1><p>Java程序都是通过JDBC连接数据库的。</p>
-<h2 id="JDBC规范"><a href="#JDBC规范" class="headerlink" title="JDBC规范"></a>JDBC规范</h2><ul>
-<li><strong>Connection</strong>: 连接数据库</li>
-<li><strong>Statement</strong>: 执行SQL</li>
-<li><strong>ResultSet</strong>: 返回的结果   </li>
-</ul>
-<p><code>connection 创建 statement 查询 resultSet</code>    </p>
-<h2 id="数据库驱动"><a href="#数据库驱动" class="headerlink" title="数据库驱动"></a>数据库驱动</h2><p><em>连接数据库利用数据库驱动</em><br><code>Driver ==&gt; DriverManage ==&gt; getConnection()</code></p>
-<h1 id="核心组件"><a href="#核心组件" class="headerlink" title="核心组件"></a>核心组件</h1><ul>
-<li><strong>SqlSessionFactoryBuilder</strong> ：根据配置信息或代码生成SqlSessionFactory</li>
-<li><strong>SqlSessionFactory</strong> ：依靠工厂来生成SqlSession</li>
-<li><strong>SqlSession</strong> ：是接口：①发送SQL去执行并返回结果 ②获取Mapper</li>
-<li><strong>SQL Mapper</strong> ：由Java接口和xml文件构成，给出对应的SQL和映射规则，负责发送SQL去执行，并返回结果。</li>
-</ul>
-<h2 id="映射器"><a href="#映射器" class="headerlink" title="映射器"></a>映射器</h2><p>映射器是由Java接口和XML文件共同组成。    </p>
-<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><ul>
-<li>定义参数类型   </li>
-<li>描述缓存  </li>
-<li>描述SQL语句</li>
-<li>定义查询结果和POJO的映射关系</li>
-</ul>
-<h3 id="主要元素"><a href="#主要元素" class="headerlink" title="主要元素"></a>主要元素</h3><ul>
-<li><strong>select</strong>查询语句，可以自定义参数，返回结果集</li>
-<li><strong>insert</strong>插入语句，可以返回一个整数，表示插入的条数</li>
-<li><strong>update</strong>更新语句，可以返回一个整数，表示更新的条数</li>
-<li><strong>delete</strong>删除语句，返回一个整数，表示删除的条数</li>
-<li><strong>sql</strong>允许顶一个一部分SQL，在各个地方引用</li>
-<li><strong>resultMap</strong>，描述从数据库结果集中加载对象，配置关联关系</li>
-<li><strong>cache</strong>给定命名空间的缓存配置</li>
-</ul>
-<h3 id="CRUD元素"><a href="#CRUD元素" class="headerlink" title="CRUD元素"></a>CRUD元素</h3><ul>
-<li><strong>paramterType</strong>：传入的参数类型。基本类型/map/自定义Java Bean</li>
-<li><strong>resultType</strong>：返回的结果类型。基本类型/自定义Java Bean</li>
-<li><strong>resultMap</strong>：返回的结果map</li>
-<li><strong>flushCache</strong>：用于更新缓存、默认为false</li>
-<li><strong>useCache</strong>：启动二级缓存的开关，默认会启动以及缓存</li>
-<li><strong>timeout</strong>：设置超时参数，等超时时将跑出异常，单位为秒</li>
-<li><strong>fetchSize</strong>：获取记录的总条数设定</li>
-<li><strong>keyProperty</strong>：指定哪个列是主键，如果是联合主键可以用逗号隔开</li>
-<li><strong>keyColumn</strong>：指定第几列是主键</li>
-<li><strong>useGeneratedKeys</strong>：是否使用自动增长，默认为false</li>
-</ul>
-<h3 id="动态SQL元素"><a href="#动态SQL元素" class="headerlink" title="动态SQL元素"></a>动态SQL元素</h3><ul>
-<li><strong>if</strong>：判断语句</li>
-<li><strong>choose</strong>：多条件分支判断</li>
-<li><strong>trim</strong>：处理一些SQL拼装问题</li>
-<li><strong>foreach</strong>：循环语句，在in语句等列举条件常用</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/10/29/Mybatis/" data-id="ck2fstvn40000hzk204wv9xur" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/" rel="tag">Java</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
-
-
-  
-
 
 </section>
         
